@@ -6,10 +6,11 @@
 #    By: mannouao <mannouao@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/10 14:45:07 by mannouao          #+#    #+#              #
-#    Updated: 2021/12/15 18:10:40 by mannouao         ###   ########.fr        #
+#    Updated: 2022/03/16 10:33:37 by mannouao         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+MLX = mlx/libmlx.a
 NAME = so_long
 LIBFT = libft/libft.a
 BONUS_SRCS = so_long_bonus.c\
@@ -41,18 +42,25 @@ all : $(NAME)
 
 $(NAME) : bonus
 
-bonus : $(BONUS_OBJS)
+bonus : $(BONUS_OBJS) $(LIBFT) $(MLX)
+	@$(CC) $(CFLAGS) $(XFLAGS) $(MLX) $(BONUS_OBJS) $(LIBFT) -o $(NAME)
+
+$(LIBFT) :
 	@make -C libft
-	@$(CC) $(CFLAGS) $(XFLAGS) $(BONUS_OBJS) $(LIBFT) -o $(NAME)
-	
+
+$(MLX):
+	@make -C mlx
+
 %.o : %.c
 	@$(CC) $(CFLAGS) -c $<
 
 clean :
+	@make -C mlx clean
 	@make -C libft -f Makefile clean
 	@rm -f $(OBJS) $(BONUS_OBJS)
 
 fclean : clean
+	@make -C mlx fclean
 	@make -C libft -f Makefile fclean
 	@rm -f $(NAME)
 
